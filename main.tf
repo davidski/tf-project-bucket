@@ -1,18 +1,3 @@
-provider "aws" {
-  region  = "${var.aws_region}"
-  profile = "${var.aws_profile}"
-
-  assume_role {
-    role_arn = "arn:aws:iam::754135023419:role/administrator-service"
-  }
-}
-
-# Data source for the availability zones in this zone
-data "aws_availability_zones" "available" {}
-
-# Data source for current account number
-data "aws_caller_identity" "current" {}
-
 # Data source for main infrastructure state
 data "terraform_remote_state" "main" {
   backend = "s3"
