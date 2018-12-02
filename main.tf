@@ -1,15 +1,3 @@
-# Data source for main infrastructure state
-data "terraform_remote_state" "main" {
-  backend = "s3"
-
-  config {
-    bucket  = "infrastructure-severski"
-    key     = "terraform/infrastructure.tfstate"
-    region  = "us-west-2"
-    encrypt = "true"
-  }
-}
-
 /*
   -------------
   | S3 Bucket |
@@ -34,7 +22,7 @@ resource "aws_s3_bucket" "project_bucket" {
   }
 
   logging {
-    target_bucket = "${data.terraform_remote_state.main.auditlogs}"
+    target_bucket = "${var.audit_bucket}"
     target_prefix = "s3logs/${var.project}-severski/"
   }
 }

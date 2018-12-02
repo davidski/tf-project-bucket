@@ -11,3 +11,4 @@ read-write access to the new bucket
 Expected input:
 
 - project - Identifies the project, used to name the bucket.
+- audit_bucket - Name of the pre-existing bucket in which to deposit S3 access logs.
