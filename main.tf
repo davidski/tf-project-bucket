@@ -17,12 +17,12 @@ resource "aws_s3_bucket" "project_bucket" {
 
   tags {
     Name       = "${var.project} bucket"
-    project    = "${var.project}"
-    managed_by = "Terraform"
+    project    = var.project
+    managed_by = "terraform"
   }
 
   logging {
-    target_bucket = "${var.audit_bucket}"
+    target_bucket = var.audit_bucket
     target_prefix = "s3logs/${var.project}-severski/"
   }
 }
@@ -34,7 +34,7 @@ resource "aws_s3_bucket" "project_bucket" {
 */
 
 resource "aws_iam_role" "s3_accessor" {
-  name_prefix = "${var.project}"
+  name_prefix = var.project
   description = "Allow access to S3 project bucket"
 
   assume_role_policy = <<EOF
@@ -54,14 +54,14 @@ resource "aws_iam_role" "s3_accessor" {
 EOF
 
   tags {
-    project    = "${var.project}"
+    project    = var.project
     managed_by = "Terraform"
   }
 }
 
 resource "aws_iam_policy" "policy" {
-  name_prefix = "${var.project}"
-  description = "Full RW acceess to project S3 bucket"
+  name_prefix = var.project
+  description = "Full RW access to project S3 bucket"
 
   policy = <<EOF
 {
@@ -90,19 +90,19 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "s3_accessor" {
-  role       = "${aws_iam_role.s3_accessor.id}"
-  policy_arn = "${aws_iam_policy.policy.arn}"
+  role       = aws_iam_role.s3_accessor.id
+  policy_arn = aws_iam_policy.policy.arn
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name_prefix = "${var.project}"
-  role        = "${aws_iam_role.s3_accessor.name}"
+  name_prefix = var.project
+  role        = aws_iam_role.s3_accessor.name
 }
 
 output "ec2_instance_profile_arn" {
-  value = "${aws_iam_instance_profile.ec2_profile.arn}"
+  value = aws_iam_instance_profile.ec2_profile.arn
 }
 
 output "project_bucket_id" {
-  value = "${aws_s3_bucket.project_bucket.id}"
+  value = aws_s3_bucket.project_bucket.id
 }
