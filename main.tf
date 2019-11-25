@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "project_bucket" {
     }
   }
 
-  tags {
+  tags = {
     Name       = "${var.project} bucket"
     project    = var.project
     managed_by = "terraform"
@@ -53,7 +53,7 @@ resource "aws_iam_role" "s3_accessor" {
 }
 EOF
 
-  tags {
+  tags = {
     project    = var.project
     managed_by = "Terraform"
   }
